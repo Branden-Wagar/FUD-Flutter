@@ -30,6 +30,7 @@ class EventDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
+
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(80.0),

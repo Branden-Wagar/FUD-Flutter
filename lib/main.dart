@@ -43,11 +43,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   
   void CreateEvent(int i){
-    Navigator.of(context).push(
-      new MaterialPageRoute(builder: (BuildContext context){
-        return CreateEventPage();
-      })
-    );
+    // button index 1 is createEvent
+    if (i == 1){
+      Navigator.of(context).push(
+          new MaterialPageRoute(builder: (BuildContext context){
+            return CreateEventPage();
+          })
+      );
+    }
+
   }
   
   Widget _buildBody(BuildContext context) {

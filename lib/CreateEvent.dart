@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fud/Event.dart';
 
 
@@ -30,7 +31,7 @@ class CreateEventState extends State<CreateEventPage> {
 
 
   Widget _buildBody(){
-    return Column(
+    return ListView(
       children: <Widget>[
         
         Padding(
@@ -41,6 +42,7 @@ class CreateEventState extends State<CreateEventPage> {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "Enter Event Title",
+            hasFloatingPlaceholder: false,
           ),
           maxLength: 30,
           style: TextStyle(fontSize: 20, color: Colors.orangeAccent),
@@ -87,23 +89,22 @@ class CreateEventState extends State<CreateEventPage> {
           keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
           keyboardAppearance: Brightness.dark,
           controller: price,
+
         ),
-        Divider(height: 8,),
+        Divider(height: 16,),
 
         CupertinoButton(
-          child: Text("Create"),
-          onPressed: () => submitEvent() /*{
-            return showDialog(
-              context: context,
-              builder: (context){
-                return AlertDialog(
-                  title: Text(eventTitle.text),
-                  content: Text(description.text),
-                );
-              }
-            );
-          },*/
-        )
+          child: Text("Create", style: TextStyle(fontSize: 30, color: Colors.orangeAccent),),
+          onPressed: () => submitEvent(),
+          color: Colors.lightBlue,
+        ),
+        IconButton(
+          icon: Icon(Icons.create, size: 50,),
+          onPressed: () => submitEvent(),
+          color: Colors.lightBlue,
+          splashColor: Colors.grey,
+        ),
+
       ],
     );
   }
