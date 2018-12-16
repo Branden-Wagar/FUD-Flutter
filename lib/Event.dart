@@ -8,6 +8,7 @@ class Event {
   final DateTime date;
   final DocumentReference reference;
 
+  Event(this.name, this.price, this.description, this.cuisineType, this.date, this.reference);
   Event.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['eventName'] != null),
         assert(map['description'] != null),

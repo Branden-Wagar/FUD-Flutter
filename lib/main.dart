@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fud/CreateEvent.dart';
 import 'package:fud/Event.dart';
 import 'package:fud/EventDetailsPage.dart';
 
@@ -29,9 +30,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Events')),
       body: _buildBody(context),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.menu), title: Text('Options')),
+          BottomNavigationBarItem(icon: Icon(Icons.create), title: Text('Create Event')),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings')),
+        ],
+        onTap: (int i) => CreateEvent(i),
+      ),
     );
   }
 
+  
+  void CreateEvent(int i){
+    Navigator.of(context).push(
+      new MaterialPageRoute(builder: (BuildContext context){
+        return CreateEventPage();
+      })
+    );
+  }
+  
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('events').snapshots(),
