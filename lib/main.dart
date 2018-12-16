@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fud/Event.dart';
+import 'package:fud/EventDetailsPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -73,122 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void viewEvent(Event event){
     Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsPage(event: event)));
-    /*
-    Navigator.of(context).push(
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-          return EventDetailsPage();
-        }
-      )
-    );*/
+
   }
 }
-
-
-class EventDetailsPage extends StatelessWidget {
-  final Event event;
-
-  EventDetailsPage({Key key, @required this.event}) : super(key:key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Event Details')),
-      body: _buildBody(context),
-
-    );
-  }
-
-  Widget _buildBody(BuildContext context){
-    return Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(80.0),
-            ),
-            rowBuild("Title", event.name),
-            Divider(height: 32),
-
-            rowBuild("Food Type", event.cuisineType),
-            Divider(height: 32,),
-
-            rowBuild("Price", "\$" + event.price.toString()),
-            Divider(height: 32,),
-
-          ],
-
-        )
-
-    );
-  }
-
-  Widget rowBuild(String label, String field){
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text("$label: ", style: TextStyle(fontSize: 32),),
-        Text(field, style: TextStyle(fontSize: 32, color: Colors.orange),)
-      ],
-    );
-  }
-
-  Widget descriptionBuild(String field){
-
-  }
-
-
-}
-
-/*
-class EventDetailsPage extends StatefulWidget {
-  @override
-  _EventDetailsState createState() {
-    return _EventDetailsState();
-  }
-}
-
-class _EventDetailsState extends State<EventDetailsPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Event Details')),
-      body: _buildBody(context),
-
-    );
-  }
-
-  Widget _buildBody(BuildContext context){
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Title: ", style: TextStyle(fontSize: 32),)
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Cuisine Type:", style: TextStyle(fontSize: 32),)
-            ],
-          ),
-        ],
-
-      )
-
-    );
-  }
-
-
-}*/
 
