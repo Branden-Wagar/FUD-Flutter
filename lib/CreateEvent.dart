@@ -34,7 +34,12 @@ class CreateEventState extends State<CreateEventPage> {
 
 
   Widget _buildBody(){
-    userNameController.text = currUser.displayName;
+    if (currUser == null){
+      userNameController.text = "Anonymous";
+    }
+    else{
+      userNameController.text = currUser.displayName;
+    }
     return ListView(
       children: <Widget>[
         
