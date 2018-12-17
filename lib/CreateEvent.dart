@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,19 +8,21 @@ import 'package:fud/Event.dart';
 
 class CreateEventPage extends StatefulWidget {
   Event event;
-
-
-
+  final FirebaseUser currUser;
+  CreateEventPage({Key key, @required this.currUser}) : super(key:key);
   @override
-  State<StatefulWidget> createState() => new CreateEventState();
+  State<StatefulWidget> createState() => new CreateEventState(currUser: currUser);
 }
 
 class CreateEventState extends State<CreateEventPage> {
 
+  CreateEventState({Key key, @required this.currUser});
+  final FirebaseUser currUser;
   final eventTitle = TextEditingController();
   final cuisineType = TextEditingController();
   final description = TextEditingController();
   final price = TextEditingController();
+  final userNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,7 @@ class CreateEventState extends State<CreateEventPage> {
 
 
   Widget _buildBody(){
+    userNameController.text = currUser.displayName;
     return ListView(
       children: <Widget>[
         
@@ -104,6 +108,13 @@ class CreateEventState extends State<CreateEventPage> {
           color: Colors.lightBlue,
           splashColor: Colors.grey,
         ),
+        Divider(height: 16,),
+        TextField(
+          textAlign: TextAlign.center,
+          enabled: false,
+          controller: userNameController,
+
+        )
 
       ],
     );
@@ -117,6 +128,7 @@ class CreateEventState extends State<CreateEventPage> {
           'price' : double.parse(price.text),
           'date' : DateTime.now()
         });
+        Navigator.pop(context);
   }
 
 }

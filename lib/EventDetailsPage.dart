@@ -19,6 +19,7 @@ class EventDetailsPage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.navigation), title: Text('Navigate')),
           BottomNavigationBarItem(icon: Icon(Icons.report), title: Text('Report Event')),
         ],
+        onTap: (int i) => navBarController(i, context),
       ),
 
     );
@@ -67,8 +68,14 @@ class EventDetailsPage extends StatelessWidget {
 
   Widget descriptionBuild(String field){
     return Text(
-      field, style: TextStyle(fontSize: 32, color: Colors.orange),
+      field, style: TextStyle(fontSize: 32, color: Colors.orange,),
     );
+  }
+
+  void navBarController(int i, BuildContext context) {
+    if (i == 0){ // 0 is the home page
+      Navigator.pop(context);
+    }
   }
 
 
