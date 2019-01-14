@@ -35,7 +35,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  bool freeOnly = false;
+  int priceSliderPosition = 20;
+  double maxPriceInList = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +51,43 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         onTap: (int i) => BottomNavBarController(i),
       ),
+      drawer: new Drawer(
+        child: ListView(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: new Text(currUser != null ? currUser.displayName : 'Not Logged In'),
+              accountEmail: new Text(currUser != null ? currUser.email : ''),
+            ),
+            new ListTile(
+              title: new Text("About us"),
+            ),
+            new SwitchListTile(
+              value: freeOnly,
+              title: new Text("Free Food Only"),
+              onChanged: (bool value) {setState(() {
+                freeOnly = value;
+                priceSliderPosition =  value ? 0 : 20;
+              });},
+            ),
+            new ListTile(
+              title: new Text("Max Price"),
+              subtitle: new Slider(
+                value: priceSliderPosition.toDouble(),
+                max: 20,
+                min: 0,
+                onChanged: (double val){
+                  setState(() {
+                    priceSliderPosition = val.round();
+                  });
+                },
+                label: 'Max Price',
+
+              ),
+            ),
+
+          ],
+        ),
+      ),
       backgroundColor: Colors.white,
     );
   }
@@ -59,20 +98,23 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: Firestore.instance.collection('events').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
-
-        return _buildList(context, snapshot.data.documents);
+        //snapshot.data.documents.removeWhere((data) => Event.fromSnapshot(data).price == 0);
+        snapshot.data.documents.forEach((event) => priceMax(Event.fromSnapshot(event).price));
+        return _buildList(context, ApplyFilters(snapshot.data.documents));
       },
     );
   }
 
+
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+      children: snapshot.map((DocumentSnapshot data) => _buildListItem( data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+
+  Widget _buildListItem(DocumentSnapshot data) {
     final event = Event.fromSnapshot(data);
 
     return Padding(
@@ -94,6 +136,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
+  List<DocumentSnapshot> ApplyFilters(List<DocumentSnapshot> events){
+    List<DocumentSnapshot> toReturn = events;
+    if (freeOnly){
+      toReturn.removeWhere((event) => Event.fromSnapshot(event).price != 0);
+    }
+    toReturn.removeWhere((event) => Event.fromSnapshot(event).price > ((priceSliderPosition * 5) / 100) * maxPriceInList);
+
+    return toReturn;
+  }
+
+
+  void priceMax(double i){
+    if (i > maxPriceInList){
+      maxPriceInList = i;
+    }
+  }
 
   void viewEvent(Event event){
     Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsPage(event: event)));

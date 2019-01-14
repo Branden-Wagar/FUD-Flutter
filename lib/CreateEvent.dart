@@ -16,13 +16,19 @@ class CreateEventPage extends StatefulWidget {
 
 class CreateEventState extends State<CreateEventPage> {
 
-  CreateEventState({Key key, @required this.currUser});
+  CreateEventState({Key key, @required this.currUser}){
+    foodTypes = foodTypesToMenuItems();
+    //foodTypesToMenuItems().then((val) => foodTypes = val);
+  }
   final FirebaseUser currUser;
   final eventTitle = TextEditingController();
-  final cuisineType = TextEditingController();
+  //final cuisineType = TextEditingController();
   final description = TextEditingController();
   final price = TextEditingController();
   final userNameController = TextEditingController();
+  List<DropdownMenuItem<String>> foodTypes;
+  String selectedFoodType;
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +65,31 @@ class CreateEventState extends State<CreateEventPage> {
           keyboardType: TextInputType.text,
         ),
         Divider(height: 8,),
+        Container(
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                DropdownButton<String>(
+                  items: foodTypes,
+                  value: selectedFoodType,
+                  hint: Text("Enter Food Type"),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedFoodType = val;
+                    });
+                  },
+                  style: TextStyle(fontSize: 20, color:Colors.orangeAccent),
+                  isExpanded: false,
+                  isDense: false,
 
-        TextField(
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: "Enter Cuisine Type",
-
+                ),
+              ],
+            ),
           ),
-          maxLength: 15,
-          style: TextStyle(fontSize: 20, color: Colors.orangeAccent),
-          controller: cuisineType,
-          keyboardType: TextInputType.text,
         ),
+
         Divider(height: 8,),
 
         TextField(
@@ -125,15 +143,23 @@ class CreateEventState extends State<CreateEventPage> {
     );
   }
 
+
   void submitEvent(){
         Firestore.instance.collection("events").document(eventTitle.text).setData({
           'eventName' : eventTitle.text,
           'description' : description.text,
-          'cuisineType' : cuisineType.text,
+          'cuisineType' : selectedFoodType,
           'price' : double.parse(price.text),
           'date' : DateTime.now()
         });
         Navigator.pop(context);
+  }
+
+  List<DropdownMenuItem<String>> foodTypesToMenuItems() {
+    List<String> types = ['Chinese', 'American', 'Italian', 'Pizza', 'Desserts', 'BBQ', 'Mexican', 'Halal', 'Candy'];
+    List<DropdownMenuItem<String>> toReturn = new List<DropdownMenuItem<String>>();
+    types.forEach((type) => toReturn.add(new DropdownMenuItem(child: Text(type,), value: type,)));
+    return toReturn;
   }
 
 }

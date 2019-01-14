@@ -36,13 +36,13 @@ class EventDetailsPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(80.0),
             ),
-            rowBuild("Title", event.name),
+            rowBuild("Title", event.name, MediaQuery.of(context).size.width),
             Divider(height: 32),
 
-            rowBuild("Food Type", event.cuisineType),
+            rowBuild("Food Type", event.cuisineType, MediaQuery.of(context).size.width),
             Divider(height: 32,),
 
-            rowBuild("Price", "\$" + event.price.toString()),
+            rowBuild("Price", "\$" + event.price.toString(), MediaQuery.of(context).size.width),
             Divider(height: 32,),
 
             descriptionBuild(event.description),
@@ -55,13 +55,25 @@ class EventDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget rowBuild(String label, String field){
+  Widget rowBuild(String label, String field, maxWidth){
+    return Container(
+      width: maxWidth,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: <Widget>[
+          Text("$label: ", style: TextStyle(fontSize: 32),),
+          Text(field, style: TextStyle(fontSize: 32, color: Colors.orange), overflow: TextOverflow.fade,)
+        ],
+      ),
+    );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text("$label: ", style: TextStyle(fontSize: 32),),
-        Text(field, style: TextStyle(fontSize: 32, color: Colors.orange),)
+        Text(field, style: TextStyle(fontSize: 32, color: Colors.orange), maxLines: 3,)
       ],
     );
   }
