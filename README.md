@@ -2,6 +2,13 @@
 
 Cross platform Flutter implementation of FUD
 
+
+Written By: Branden Wagar
+
+FUD allows users to find and post nearby food events,
+so all users can find good cheap food nearby.
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
